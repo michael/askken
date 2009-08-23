@@ -1,0 +1,2 @@
+michael-ken --version '>= 0.0.3' --source gems.github.com
+extlib --version '>= 0.9.10'

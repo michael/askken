@@ -1,0 +1,17 @@
+-# fur future use
+%h2= @resource.name
+- @resource.views.each do |view|
+  - if view.attributes.length>0
+    %h3= view
+    - view.attributes.each do |attribute|
+      %h4
+        = attribute.property.name
+      %ul
+        - attribute.values.each do |value|
+          %li          
+            - if attribute.property.expected_type=="/common/image"
+              %img{:src => "http://img.freebase.com/api/trans/image_thumb/#{value.id}?maxheight=70&mode=fit&maxwidth=70"}
+            - elsif attribute.property.object_type?
+              %a{:href => "/resources/show?id=#{value.id}"}= value
+            - else
+              = value

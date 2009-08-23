@@ -1,0 +1,13 @@
+h1. ASK KEN™ - Visual Knowledge Browser
+
+"ASK KEN™":http://askken.heroku.com is some sort of a Node-Link diagram that allows to visually navigate through the "Freebase":http://www.freebase.com graph. 
+
+It uses "Rails":http://rubyonrails.org and the "Ken Ruby Freebase API Wrapper":http://github.com/michael/ken in the backend and "Processing.js":http://processingjs.org on front.
+
+Using the new canvas element for drawing ASK KEN™ takes advantage of the latest HTML5 features.
+
+Although it's basically working the project is far from being complete. Originally, it was just an attempt to build something useful on top of the Ken Freebase Library. ;)
+
+Anyway, I hope you like it! 
+
+Please feel free to check out the code and share your ideas! :)

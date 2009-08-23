@@ -1,0 +1,225 @@
+color[] colors = new color[8];
+colors[0] = color(0, 126, 255, 100)
+colors[1] = color(200, 120, 255, 100)
+colors[2] = color(60, 70, 100, 100)
+colors[3] = color(52, 126, 30, 100)
+colors[4] = color(20, 126, 211, 100)
+colors[5] = color(10, 210, 150, 100)
+colors[6] = color(62, 50, 198, 100)
+colors[7] = color(34, 40, 111, 100)
+
+
+PFont defaultFont = loadFont("/fonts/Helvetica.svg");
+int fontSize = 12.5;
+Resource fetchResource(String resource) {
+	var json;
+	$.ajax({
+		async: false,
+    type: "GET",
+    url: "/resources/show",
+		data: {id: resource},
+    dataType: 'json',
+    success: function(response) {
+      json = response.data;
+    }
+  });
+	
+	Resource resource = new Resource(json.id, json.name);
+	int numValues = 0;
+	for (int i = 0 ; i < json.attributes.length(); i++) {
+		Attribute attr = new Attribute(json.attributes[i].name, resource);
+		
+		for (int j = 0; j < json.attributes[i].values.length(); j++) {
+			attr.addValue(new Value(json.attributes[i].values[j].id, json.attributes[i].values[j].name, attr));
+			numValues++;
+		}
+		resource.addAttribute(attr);
+	}
+	
+	resource.setNumValues(numValues);
+
+	return resource;
+}
+
+Graph g;
+Resource r;
+
+float NODE_SIZE = 10;
+float EDGE_LENGTH = 20;
+float EDGE_STRENGTH = 0.2;
+float SPACER_STRENGTH = 1000;
+
+int selectedValueIndex;
+int selectedNodeIndex;
+
+
+void resize() {
+	size(window.innerWidth-40, window.innerHeight-135);
+}
+
+void setup() {	
+	g = new Graph();
+	// Activate font for output
+	textFont(defaultFont, fontSize);
+
+  resize();
+  fill(0);
+  smooth();
+  frameRate(30);
+	background(255);
+
+	if (resourceId) {
+		r = fetchResource(resourceId);
+		g.addNode(root = new Node(r));
+		g.setSelectedNode(root);
+	}
+}
+
+void draw() {
+	if (resourceId) {
+	  g.tick();
+		background(255);
+	
+	  g.draw();
+	}
+}
+
+void mouseMoved() {
+	if (!resourceId) return;
+	
+	if (g.getDragNode()==null) {
+		Resource r = g.getSelectedNode().getSubject();
+		ArrayList values = r.getValues();
+		Attribute oldSelectedAttribute = r.getSelectedAttribute();
+		int oldValueIndex = selectedValueIndex;
+		selectedValueIndex = null;
+		// Iterate over values
+		for (int i = 0; i < values.size(); i++) {
+			if (values[i].mouseOver()) {
+				selectedValueIndex = i;
+			}
+		}
+		
+		if (selectedValueIndex!=null) {
+			if (oldSelectedAttribute != r.getSelectedAttribute()) {								
+				float offset = 0;
+				if (selectedValueIndex != null) {
+					
+					if (r.previousSelectedAttribute!=null) r.previousSelectedAttribute.weight = 1.0;
+					r.selectedAttribute.weight = 4.0;
+					// r.transitioning = true;
+					
+					float targetAngle = (values[selectedValueIndex].angleStart +values[selectedValueIndex].angleStop) / 2;
+					if (oldSelectedAttribute!=null) oldSelectedAttribute.targetWeight = 1.0;
+					r.getSelectedAttribute().targetWeight = 4.0;
+					
+					r.update();
+					currentAngle = (r.getValues()[selectedValueIndex].angleStart +r.getValues()[selectedValueIndex].angleStop) / 2
+					
+					offset = targetAngle-currentAngle;
+					float targetAdjustment = r.angleAdjustment+offset;
+					if (targetAdjustment<0) {
+						targetAdjustment = TWO_PI - targetAdjustment;
+					}
+					r.setAngleAdjustment(targetAdjustment);
+				}				
+			}
+		}
+		
+		if (selectedValueIndex==null && r.selectedAttribute!=null) {
+			// r.selectedAttribute.weight = 1.0;
+			// r.setSelectedAttribute(null);
+		}
+		
+		selectedNodeIndex = null;
+		// Iterate over nodes
+		for (int i=0; i< g.nodes.size(); i++) {
+			if (g.nodes[i].mouseOver()) {
+				selectedNodeIndex = i;
+			}
+		}
+	}
+}
+
+void mousePressed() {
+	if (!resourceId) return;
+  if (mouseButton == LEFT) {
+		Node selectedNode = g.getSelectedNode();
+		Resource r = selectedNode.getSubject();
+		
+		if (selectedValueIndex != null) {
+			// Close current resource
+			r.setClosed();
+			r2 = fetchResource(r.getValues()[selectedValueIndex].getId());
+			
+			// Check if resource already exists
+	    int i = 0; Node n = null;
+	    while (i < g.nodes.size() && !n) {
+				if (g.nodes[i].getSubject().getId()==r2.getId())
+					n = g.nodes[i];
+	      i++;
+	    }
+
+	    if (!n) {
+				g.addNode(newNode = new Node(r2));
+				g.addEdge(new Edge(selectedNode, newNode));
+				g.setSelectedNode(newNode);
+			} else {
+				g.addEdge(new Edge(selectedNode, n));
+				g.setSelectedNode(g.nodes[0]);
+			}
+
+		} else if (selectedNodeIndex != null) {
+			// TODO: Zoom to node
+			r.setClosed();
+			selectedNode = g.nodes[selectedNodeIndex];
+			selectedNode.getSubject().setOpen();
+			g.setSelectedNode(selectedNode);
+			g.setDragNode(selectedNode);
+		}
+				
+  } else { // Right click
+		Node selectedNode = g.getSelectedNode();
+		Resource r = selectedNode.getSubject();
+	}
+}
+
+void mouseReleased() {
+  g.setDragNode(null);
+}
+
+void mouseDragged() {
+  if (g.getDragNode() != null) {
+    g.getDragNode().setPos(mouseX, mouseY, 0);
+  }
+}
+
+public class RadialText
+{
+	String value;
+	float x;
+	float y;
+	float radius;
+		
+  RadialText(String value, float x, float y, float radius)
+  {
+		this.value = value;
+    this.x = x;
+		this.y = y;
+		this.radius = radius;
+  }
+
+  public void draw(float angleStart, float angleStop) {
+    float theta = angleStart;
+		float angleStep = 0.2; // (angleStop-angleStart)/value.length;
+		
+    for (int i = 0; i < value.length(); ++i) {
+      pushMatrix();
+      translate( this.x+cos(theta)*radius, this.y+sin(theta)*radius);
+      rotate(theta+PI/2);
+      text(value.substring(i, i+1 ), 0, 0);
+      popMatrix();
+      theta += angleStep;
+    }
+  }
+}
