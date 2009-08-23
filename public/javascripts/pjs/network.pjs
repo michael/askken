@@ -76,7 +76,7 @@ void setup() {
 }
 
 void draw() {
-	if (resourceId) {
+	if (g.nodes.size()>0) {
 	  g.tick();
 		background(255);
 	

@@ -1,12 +1,11 @@
 <script type="text/javascript">
-  var p = null;
   $(function() {
     var canvas = document.getElementById("kenviz");
-    p = Processing(canvas);
+    var p = Processing(canvas);
     
     var initialized = false;
     
-    var search = $("#fb-suggest")
+    var search = $("#fb-suggest");
     search.suggest()
     .bind("fb-select", function(e, data) {
        p.resourceId = data.id;
