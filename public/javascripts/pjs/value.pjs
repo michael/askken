@@ -114,6 +114,15 @@ public class Value {
 		float start = this.angleStart % TWO_PI;
 		float stop = this.angleStop % TWO_PI;
 		
+		// workaround for resources that have just one value
+		if (this.attr.getResource().getValues().size()==1) {
+			if (radius >= this.attr.getResource().radius && radius <= this.attr.getResource().radiusOuter) {
+				hovering = true;
+				attr.getResource().setSelectedAttribute(attr);
+				return true;
+			}
+		}
+		
 		if (radius >= this.attr.getResource().radius && radius <= this.attr.getResource().radiusOuter && 
 				((angle>start && angle<stop) || (start>stop && (angle > start || angle < stop)))    ) {
 			hovering = true;

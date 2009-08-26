@@ -54,3 +54,56 @@ end
 
 Haml::Template.options[:format] = :html5
 #Transformer.default_transformer = ResourceTransformer
+
+
+# patch FETCH_DATA_QUERY
+module Ken
+  FETCH_DATA_QUERY = {
+    # :id => id, # needs to be merge!d in instance method
+    :guid => nil,
+    :name => nil,
+    :"ken:type" => [{
+      :id => nil,
+      :name => nil,
+      :properties => [{
+        :id => nil,
+        :name => nil,
+        :expected_type => nil,
+        :unique => nil,
+        :reverse_property => nil,
+        :master_property => nil,
+      }]
+    }],
+    :"/type/reflect/any_master" => [
+      {
+        :id => nil,
+        :link => nil,
+        :name => nil,
+        :optional => true,
+        :type => "/common/topic",
+        :limit => 200
+      }
+    ],
+    :"/type/reflect/any_reverse" => [
+      {
+        :id => nil,
+        :link => nil,
+        :name => nil,
+        :optional => true,
+        :type => "/common/topic",
+        :limit => 200
+      }
+    ],
+    :"/type/reflect/any_value" => [
+      {
+        :link => nil,
+        :value => nil,
+        :optional => true,
+        :limit => 200
+        # TODO: support multiple language
+        # :lang => "/lang/en",
+        # :type => "/type/text"
+      }
+    ]
+  }
+end

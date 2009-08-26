@@ -110,6 +110,16 @@ section#infovis {
   display:none;  
 }
 
+#browser_not_supported {
+	font-family:"Georgia",Helvetica,Lucida,Arial,sans-serif;
+	width: 500px;
+	margin: auto;
+	padding-top: 120px;
+	line-height: 2em;
+	font-style: italic;
+	text-align: center;
+}
+
 
 /* Clearing */
 .clearfix:after, #frame:after, .navigation:after {
