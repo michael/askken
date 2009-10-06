@@ -778,7 +778,9 @@ function buildProcessing( curElement ){
     }catch(e){;}
   }
   
-  p.text = function text( str, x, y ) {
+  // textbox constraints only work in glyph mode and are limited to width parameter specification
+  p.text = function text( str, x, y, width, height ) {
+    
     if(!curTextFont.glyph){
       if ( str && curContext.mozDrawText ) {
         curContext.save();
@@ -797,10 +799,44 @@ function buildProcessing( curElement ){
         var newScale=1/upem*curTextSize;
         curContext.scale(newScale,newScale);
         var len = str.length;
-        for(var i=0;i < len;i++){
-          try{p.glyphLook(font,str[i]).draw();}
-          catch(e){;}
+        
+        var maxWidth = width;
+        
+        function draw(str, spacing) {
+          curContext.save();
+          
+          curWidth = curTextFont.width(str) * curTextSize;
+          curContext.translate(spacing*(upem/curTextSize), 0);
+          
+          for(var j=0; j<str.length;j++){
+            try{p.glyphLook(font,str[j]).draw();}
+            catch(e){;}
+          }
+          curContext.restore();
         }
+
+        if (width) {
+          var words = str.split(' ');
+          // word by word
+          var strBuf = words[0];
+          for(var i=1; i<words.length;i++){
+            strBufWidth = curTextFont.width(strBuf+" "+words[i]) * curTextSize;
+            if (strBufWidth <= width) { // fits in the box?
+              strBuf += " "+words[i];
+            } else {
+              curWidth = curTextFont.width(strBuf) * curTextSize;
+              
+              draw(strBuf, (width-curWidth)/2);
+              strBuf = words[i]; // reinit buffer 
+              curContext.translate(0, upem*1.2); // line shift
+            }
+          }
+          curWidth = curTextFont.width(strBuf) * curTextSize;
+          draw(strBuf, (width-curWidth)/2);
+                    
+        } else
+          draw(str, 0);
+        
       curContext.restore();
     }
   };
@@ -864,7 +900,7 @@ function buildProcessing( curElement ){
           var buildPath = function buildPath(d){ 
             var c = regex("[A-Za-z][0-9\- ]+|Z",d);                                                    
             // Begin storing path object 
-            var path="var path={draw:function(){curContext.beginPath();";//curContext.beginPath();
+            var path="var path={draw:function(){curContext.beginPath();curContext.save();";//curContext.beginPath();
             // Loop through SVG commands translating to canvas eqivs functions in path object
             var x=0,y=0,cx=0,cy=0,nx=0,ny=0,d=0,a=0,lastCom="";
             var lenC = c.length-1;
@@ -916,9 +952,10 @@ function buildProcessing( curElement ){
               }
               lastCom=com[0];
             }
-            path+="curContext.translate("+(horiz_adv_x)+",0);";
             path+="doStroke?curContext.stroke():0;";
             path+="doFill?curContext.fill():0;";
+            path+="curContext.restore();";
+            path+="curContext.translate("+(horiz_adv_x)+",0);";            
             path+="}}";
             return path;
           }

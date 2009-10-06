@@ -1,16 +1,25 @@
-color[] colors = new color[8];
-colors[0] = color(0, 126, 255, 100)
-colors[1] = color(200, 120, 255, 100)
-colors[2] = color(60, 70, 100, 100)
-colors[3] = color(52, 126, 30, 100)
-colors[4] = color(20, 126, 211, 100)
-colors[5] = color(10, 210, 150, 100)
-colors[6] = color(62, 50, 198, 100)
-colors[7] = color(34, 40, 111, 100)
+color[] colors = new color[12];
 
+colors[0] = color(171, 199, 49);
+colors[1] = color(162, 195, 85);
+colors[2] = color(154, 191, 123);
+colors[3] = color(147, 186, 161);
+colors[4] = color(141, 181, 200);
+colors[5] = color(134, 162, 169);
+colors[6] = color(128, 142, 137);
+colors[7] = color(122, 122, 104);
+colors[8] = color(177, 102, 73);
+colors[9] = color(131, 127, 67);
+colors[10] = color(144, 150, 60);
+colors[11] = color(157, 175, 55);
 
-PFont defaultFont = loadFont("/fonts/Helvetica.svg");
-int fontSize = 12.5;
+PFont defaultFont = loadFont("/fonts/GraublauWeb-Regular.svg");
+PFont boldFont = loadFont("/fonts/GraublauWeb-Bold.svg");
+int fontSize = 11.3;
+int fontSizeCaption = 16;
+
+int nodeCount = 0;
+
 Resource fetchResource(String resource) {
 	var json;
 	$.ajax({
@@ -37,7 +46,9 @@ Resource fetchResource(String resource) {
 	}
 	
 	resource.setNumValues(numValues);
-
+	resource.idx = nodeCount;
+  nodeCount++;
+  
 	return resource;
 }
 
@@ -66,7 +77,7 @@ void setup() {
   fill(0);
   smooth();
   frameRate(30);
-	background(255);
+	background(234,239,224);
 
 	if (resourceId) {
 		r = fetchResource(resourceId);
@@ -76,12 +87,11 @@ void setup() {
 }
 
 void draw() {
-	if (g.nodes.size()>0) {
-	  g.tick();
-		background(255);
-	
-	  g.draw();
-	}
+  if (g.nodes.size()>0) {
+    g.tick();
+    background(234,239,224);
+    g.draw();
+  }
 }
 
 void mouseMoved() {
@@ -93,6 +103,7 @@ void mouseMoved() {
 		Attribute oldSelectedAttribute = r.getSelectedAttribute();
 		int oldValueIndex = selectedValueIndex;
 		selectedValueIndex = null;
+		
 		// Iterate over values
 		for (int i = 0; i < values.size(); i++) {
 			if (values[i].mouseOver()) {
@@ -108,7 +119,6 @@ void mouseMoved() {
 					if (r.previousSelectedAttribute!=null) r.previousSelectedAttribute.weight = 1.0;
 					r.selectedAttribute.weight = 4.0;
 					// r.transitioning = true;
-					
 					float targetAngle = (values[selectedValueIndex].angleStart +values[selectedValueIndex].angleStop) / 2;
 					if (oldSelectedAttribute!=null) oldSelectedAttribute.targetWeight = 1.0;
 					r.getSelectedAttribute().targetWeight = 4.0;
@@ -191,35 +201,5 @@ void mouseReleased() {
 void mouseDragged() {
   if (g.getDragNode() != null) {
     g.getDragNode().setPos(mouseX, mouseY, 0);
-  }
-}
-
-public class RadialText
-{
-	String value;
-	float x;
-	float y;
-	float radius;
-		
-  RadialText(String value, float x, float y, float radius)
-  {
-		this.value = value;
-    this.x = x;
-		this.y = y;
-		this.radius = radius;
-  }
-
-  public void draw(float angleStart, float angleStop) {
-    float theta = angleStart;
-		float angleStep = 0.2; // (angleStop-angleStart)/value.length;
-		
-    for (int i = 0; i < value.length(); ++i) {
-      pushMatrix();
-      translate( this.x+cos(theta)*radius, this.y+sin(theta)*radius);
-      rotate(theta+PI/2);
-      text(value.substring(i, i+1 ), 0, 0);
-      popMatrix();
-      theta += angleStep;
-    }
   }
 }

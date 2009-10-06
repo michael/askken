@@ -68,7 +68,6 @@ class Node {
   public void draw() {
 		// draw subject
 		subject.setPos(this.p.position().x, this.p.position().y);
-		subject.setRadiusOuter(150);
 		subject.update();
 		subject.draw();
   }

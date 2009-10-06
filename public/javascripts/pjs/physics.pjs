@@ -1043,7 +1043,6 @@ public class Vector3D
 	public float length()                 			{ return (float)Math.sqrt( x*x + y*y + z*z ); }
 	public float lengthSquared()						{ return x*x + y*y + z*z; }
 	
-	  
 	public void clear()                   				{ x = 0; y = 0; z = 0; }
 	
 	public String toString()              				{ return new String( "(" + x + ", " + y + ", " + z + ")" ); }

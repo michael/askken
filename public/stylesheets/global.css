@@ -1,13 +1,25 @@
+/* @override http://localhost:3000/stylesheets/global.css */
+
+@font-face {
+    font-family: "GraublauWeb";
+    src: url(/fonts/GraublauWeb.otf) format("truetype");
+}
+@font-face {
+    font-family: "GraublauWeb";
+    font-weight: bold;
+    src: url(/fonts/GraublauWebBold.otf) format("truetype");
+}
+
 header, footer, section, nav { display:block; }
 
 footer {
 	margin-top: 5px;
 	padding: 10px;
-	background: #fff;
+	background: #eaefe0;
 	
-	font-family:Georgia,serif;
+	font-family: GraublauWeb, Georgia,serif;
 	font-size:12px;
-	font-style:italic;
+	/*font-style:italic;*/
 	line-height:1.4;
 	
 	/* clearing */
@@ -34,7 +46,13 @@ a:hover {
 }
 
 header {
-	background: #fff;
+	background: #eaefe0;
+	margin: 0;
+	padding: 5px;
+}
+
+header {
+	background: #eaefe0;
 	margin: 0;
 	padding: 5px;
 }
@@ -42,17 +60,17 @@ header {
 
 header section#title {
 	float: left;
+	margin-top: 5px;
 }
 
 header section#title p {
 	margin: 0;
 	padding: 0;
 	margin-left: 10px;
-	font-style: italic;
+	/*font-style: italic;*/
 	
-	font-family:Georgia,serif;
+	font-family: GraublauWeb, Georgia,serif;
 	font-size:12px;
-	font-style:italic;
 	line-height:1.4;	
 }
 
@@ -67,7 +85,7 @@ html,body {
 	padding:0px;
 	color: #555;
 	
-	font-family:"Helvetica Neue",Helvetica,Lucida,Arial,sans-serif;
+	font-family: GraublauWeb, "Helvetica Neue",Helvetica,Lucida,Arial,sans-serif;
 	font-size-adjust:none;
 	font-stretch:normal;
 	font-style:normal;
@@ -75,21 +93,29 @@ html,body {
 	font-weight:normal;
 	line-height:normal;
 	
-	background: #e5e5e5;
+	/*background: #d3d8cb;*/
+	background: #eaefe0;
+	/*background: #fff;*/
+	
+}
+
+
+xs {
+	color: #a68d49;
 }
 
 body {
-	padding:10px;
+	padding:5px;
 }
 
 header h1 {
-	font-family:"Helvetica Neue",Helvetica,Lucida,Arial,sans-serif;
+	font-family: GraublauWeb, "Helvetica Neue",Helvetica,Lucida,Arial,sans-serif;
 	width: 200px;
 	color: black;
-	letter-spacing: -2px;
+	/*letter-spacing: -2px;*/
 	font-weight: bold;
 	margin: 0px;	
-	font-size:25px;
+	font-size:30px;
 	padding: 0px;
 	margin-left: 10px;
 }
@@ -97,7 +123,17 @@ header h1 {
 
 section#content {
 	margin-top: 5px;
-	background: #fff;
+	background: #eaefe0;
+	/*border: 2px solid #fff;*/
+}
+
+
+aside {
+  float: right;
+  width: 200px;
+  display: none;
+  background: #eaefe0;
+  border-left: 5px solid #e5e5e5;
 }
 
 section#infovis {
@@ -111,12 +147,12 @@ section#infovis {
 }
 
 #browser_not_supported {
-	font-family:"Georgia",Helvetica,Lucida,Arial,sans-serif;
+	font-family: GraublauWeb, "Georgia",Helvetica,Lucida,Arial,sans-serif;
 	width: 500px;
 	margin: auto;
 	padding-top: 120px;
 	line-height: 2em;
-	font-style: italic;
+  /*  font-style: italic;*/
 	text-align: center;
 }
 
@@ -147,7 +183,7 @@ section#infovis {
     -webkit-border-radius: 3px;
     padding: 5px;
     width: 300px;
-		font-family:"Georgia",Helvetica,Lucida,Arial,sans-serif;
+		font-family: GraublauWeb, "Georgia",Helvetica,Lucida,Arial,sans-serif;
 		text-align: right;
 		font-size: 13px;
 		color: #555;
@@ -155,7 +191,7 @@ section#infovis {
 
 #search .ghost-input {
     color: #99a;
-    font-style: italic;
+    /* font-style: italic;*/
 }
 
 #search .focused {
@@ -226,9 +262,9 @@ reset all Freebase Suggest elements to insure consisten cross-browser rendering
     border: 0;
     outline: 0;
     font-weight: inherit;
-    font-style: italic;
+    /*font-style: italic;*/
     font-size: 100%;
-    font-family: Georgia;
+    font-family: GraublauWeb, Georgia;
     vertical-align: baseline;
 
 }
@@ -703,7 +739,7 @@ Freebase Suggest Attribution
 }
 
 .fbs-flyout-types {
-    font-style: italic;
+    /*font-style: italic;*/
     line-height: 1; 
     font-size: 1.2em;
 }

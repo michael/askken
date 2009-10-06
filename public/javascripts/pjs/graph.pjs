@@ -144,7 +144,17 @@ class Graph {
 
 	public void draw() {
 		Arraylist nodeList = this.depthFirstWalk(nodes[0]);
-		
+
+
+		// Draw edges
+    for ( int i = 0; i < edges.size(); i++ ) {
+         Edge e = edges.get(i);
+         stroke(255);
+         strokeWeight(10);
+         
+         line(e.getFrom().getParticle().position().x, e.getFrom().getParticle().position().y, e.getTo().getParticle().position().x, e.getTo().getParticle().position().y)
+    }
+
 		// Draw nodes
 		for (int i=0; i < nodeList.size(); i++) {
 			if (nodeList[i]!=selectedNode)
@@ -153,12 +163,5 @@ class Graph {
 		
 		selectedNode.draw();
 
-		// Draw edges
-	  stroke(1);
-	  for ( int i = 0; i < edges.size(); i++ ) {
-			Edge e = edges.get(i);
-			stroke(60,60,60,80);
-			line(e.getFrom().getParticle().position().x, e.getFrom().getParticle().position().y, e.getTo().getParticle().position().x, e.getTo().getParticle().position().y)
-	  }
   }
 }

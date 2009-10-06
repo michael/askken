@@ -11,7 +11,7 @@ public class Resource {
 	float targetWeight = 1.0;
 	float highlightedWeight = 4.0;
 	
-	float diameter = 16;
+	float diameter = 10;
 
 	Attribute selectedAttribute = null;
 	Attribute previousSelectedAttribute = null;
@@ -20,6 +20,8 @@ public class Resource {
 
   boolean open = true;
 	int numValues = 0;
+	
+	int idx = 0;
 	
   int myColor = color(255);
   int myStrokeWeight = 1;
@@ -32,8 +34,8 @@ public class Resource {
   // internals
   ArrayList attributes;
 
-  int radius = 97;
-  float radiusOuter = 200;
+  int radius = 94;
+  float radiusOuter = 110;
   int n = 40;
   float angle = 0;
 
@@ -132,7 +134,7 @@ public class Resource {
 			ArrayList values = attribute.getValues();
 			
 			attribute.setPos(this.x+cos(angle)*radius, this.y+sin(angle)*radius)
-			attribute.setCol(colors[i%8]);
+			attribute.setCol(colors[i%12]);
 						
 			float angleOuterStart = angleStop;
 			float angleOuterStop = angleStop;
@@ -146,9 +148,10 @@ public class Resource {
 				if (selectedAttribute!= null && selectedAttribute==attribute) {
 					weight = highlightedWeight;
 				}
-				angleOuterStop += attribute.weight * TWO_PI / totalWeight;
+				angleOuterStop += (attribute.weight * TWO_PI / totalWeight);
 								
 				values[j].setAngles(angleOuterStart, angleOuterStop);
+				values[j].idx = j;
 			}
 		
 			// calculate dimension
@@ -157,7 +160,7 @@ public class Resource {
 			angleStop = angleOuterStop;
 			
 			attribute.setAngles(angleStart, angleStop);
-			attribute.setCol(colors[i%8]);
+			attribute.setCol(colors[i%12]);
 		}
 	}
 
@@ -202,51 +205,52 @@ public class Resource {
 	public void draw() {
 		if (open) {
 			noStroke();
+			
+			// spacer
+      fill(255);
+      ellipse(this.x, this.y, radiusOuter*2+50, radiusOuter*2+50);
+			
 			// draw attributes
 			for (int i = 0 ; i < attributes.size(); i++) {
+				
+				float weight = 40;
 				Attribute attribute = attributes[i];
 				ArrayList values = attribute.getValues();
+
+        if (selectedAttribute==attribute) {
+          weight = 50;
+          fill(255);
+          arc(this.x, this.y, (radiusOuter+30)*2, (radiusOuter+30)*2, attribute.angleStart, attribute.angleStop);
+        }
+
+				fill(0,0,0,0);
 				
-				fill(attribute.col);
+				stroke(attribute.col);
+				strokeWeight(weight);
+				
+				curContext.lineCap = "butt"; // processing.js patch!
+				
 				arc(this.x, this.y, radiusOuter*2, radiusOuter*2, attribute.angleStart, attribute.angleStop);
-				arc(this.x, this.y, radiusOuter*2+20, radiusOuter*2+20, attribute.angleStart, attribute.angleStop);
-				
-				for (int j = 0; j < values.size(); j++) {
-					if (values[j].isHovering())
-						arc(this.x, this.y, radiusOuter*2+20, radiusOuter*2+20, values[j].angleStart, values[j].angleStop);
-				}
+
+				noStroke();
 			}
 			
-			// spacer
-			fill(255);
-			ellipse(this.x, this.y, radius*2, radius*2);
-
-			// attribute label background
-			if (selectedAttribute) 
-				fill(selectedAttribute.col);
-			else
-				fill(190, 190, 190, 100);
-			
-			ellipse(this.x, this.y, 160, 160);
-			ellipse(this.x, this.y, 180, 180);
-			
-			// spacer
-			fill(255);
-			ellipse(this.x, this.y, 100, 100);
-
 			// draw values
 			for (int i = 0 ; i < attributes.size(); i++) {
 				Attribute attribute = attributes[i];
 				ArrayList values = attribute.getValues();
+				
 				for (int j = 0; j < values.size(); j++) {
-					// draw separator
-					stroke(colors[i%8]);
+				  stroke(colors[i%12]);
+				  strokeWeight(1);
 				  values[j].draw();
 				}
 				// draw labels
 				attribute.draw();
 			}
-			
+      
+      labelOffset = radiusOuter;
+      
 		}	else { // draw closed
 			noStroke();
 			
@@ -261,22 +265,27 @@ public class Resource {
 			// spacer
 			fill(255);
 			ellipse(this.x, this.y, 50, 50);
+			
+			labelOffset = 0;
 		}
 		
 		if (hovering)
 			fill(0,0,0,150);
-		else
-			fill(66, 66, 66, 100);
-		
+    else
+     fill(66, 66, 66, 100);
+
 		ellipse(this.x,this.y, diameter, diameter);
 		
-		if (hovering)
-			fill(33);
-		else
-			fill(120, 120, 120, 150);
+		fill(33);
+		textFont(defaultFont, 13);
 		
-		fontWidth = defaultFont.width(this.getName()) * fontSize;
-		text(this.getName(), this.x-fontWidth/2, this.y+10);
+		fontWidth = defaultFont.width((idx+1)+". "+this.getName()) * fontSize;
+		
+		if (!selectedValueIndex)
+		  text((idx+1)+". "+this.getName(), this.x-fontWidth/2, this.y+10+labelOffset+30);
+		
+		textFont(defaultFont, fontSize);
+		
 		noStroke();
 	}
 	
