@@ -70,6 +70,7 @@ public class Value {
 		  strokeWeight(2);
 		  line(this.attr.getResource().x+cos(this.angleStop)*(radius-10), this.attr.getResource().y+sin(this.angleStop)*(radius-10), this.attr.getResource().x+cos(this.angleStop)*(radiusOuter+25), this.attr.getResource().y+sin(this.angleStop)*(radiusOuter+25));
 		}
+		
 		fill(0,0,0);
 		
 		if (hovering) {
@@ -78,7 +79,7 @@ public class Value {
 		  stroke(0,0,0,20);
 		  strokeWeight(50);
 		  arc(this.attr.resource.x, this.attr.resource.y, (this.attr.resource.radiusOuter)*2, (this.attr.resource.radiusOuter)*2, angleStart, angleStop);
-		}		
+		}
 		strokeWeight(0); // reset
 		
     if (selectedValueIndex!=null && attr.getResource().getSelectedAttribute()==attr) {

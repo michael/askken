@@ -30,10 +30,11 @@ Resource fetchResource(String resource) {
     dataType: 'json',
     success: function(response) {
       json = response.data;
+      html = response.details_html;
     }
   });
 	
-	Resource resource = new Resource(json.id, json.name);
+	Resource resource = new Resource(json.id, json.name, html);
 	int numValues = 0;
 	for (int i = 0 ; i < json.attributes.length(); i++) {
 		Attribute attr = new Attribute(json.attributes[i].name, resource);
@@ -65,7 +66,7 @@ int selectedNodeIndex;
 
 
 void resize() {
-	size(window.innerWidth-40, window.innerHeight-135);
+	size(window.innerWidth-10, window.innerHeight-15);
 }
 
 void setup() {	
@@ -83,6 +84,7 @@ void setup() {
 		r = fetchResource(resourceId);
 		g.addNode(root = new Node(r));
 		g.setSelectedNode(root);
+		$('aside').html(r.html);
 	}
 }
 
@@ -174,16 +176,20 @@ void mousePressed() {
 				g.addNode(newNode = new Node(r2));
 				g.addEdge(new Edge(selectedNode, newNode));
 				g.setSelectedNode(newNode);
+				
 			} else {
 				g.addEdge(new Edge(selectedNode, n));
 				g.setSelectedNode(g.nodes[0]);
 			}
+			
+			$('aside').html(g.getSelectedNode().getSubject().html);
 
 		} else if (selectedNodeIndex != null) {
 			// TODO: Zoom to node
 			r.setClosed();
 			selectedNode = g.nodes[selectedNodeIndex];
 			selectedNode.getSubject().setOpen();
+			$('aside').html(selectedNode.getSubject().html);
 			g.setSelectedNode(selectedNode);
 			g.setDragNode(selectedNode);
 		}

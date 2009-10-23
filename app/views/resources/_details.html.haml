@@ -1,17 +1,58 @@
--# fur future use
+- # retrive links
+- links = []
+- result = Ken.session.mqlread({ :id => @resource.id, :"/common/topic/article" => [{:"/common/document/source_uri" => []}], :"/common/topic/webpage" => [{:uri => nil, :name => nil}] })
+
+- # collect artist links
+- if result
+  - result["/common/topic/webpage"].each do |webpage|
+    - links << {:uri => webpage["uri"], :name => webpage["name"]} unless links.include?(webpage["uri"])
+
+-# for later use
+-# artist["home_page"].each do |homepage|
+-#   artist_links << homepage["uri"] unless artist_links.include?(homepage["uri"])
+-# end
+
 %h2= @resource.name
-- @resource.views.each do |view|
-  - if view.attributes.length>0
-    %h3= view
-    - view.attributes.each do |attribute|
-      %h4
-        = attribute.property.name
-      %ul
-        - attribute.values.each do |value|
-          %li          
-            - if attribute.property.expected_type=="/common/image"
-              %img{:src => "http://img.freebase.com/api/trans/image_thumb/#{value.id}?maxheight=70&mode=fit&maxwidth=70"}
-            - elsif attribute.property.object_type?
-              %a{:href => "/resources/show?id=#{value.id}"}= value
-            - else
-              = value
+%p.summary
+  - begin
+    - wikipedia_id = result["/common/topic/article"][0]["/common/document/source_uri"][0].split("/").last
+  - rescue
+    - wikipedia_id = ""
+  - image = @resource.attribute('/common/topic/image').values.first if @resource.attribute('/common/topic/image')
+  - if image
+    %img.summary-img{:src => "http://img.freebase.com/api/trans/image_thumb/#{image.id}?mode=fit&maxwidth=150"}
+  - descr = Ken.session.blurb_content(@resource.attribute('/common/topic/article').values.first.id, :maxlength => 500) if @resource.attribute('/common/topic/article')
+  - descr = "there's no description for this topic yet." if descr.length==0
+  = descr
+  [
+  %a{:href => "http://freebase.com/view#{resource.id}", :target => "_new"} Freebase Topic
+  
+  - if wikipedia_id != ""
+    |
+    = "&nbsp;"
+    %a{:href => "http://en.wikipedia.org/w/index.php?curid=#{wikipedia_id}", :target => "_new"} Wikipedia Article  
+  ]
+  
+  - if links.length > 0
+    %h3 Links
+    - if @resource.attribute('/common/topic/webpage')
+      %ul.links
+        - links.each do |link|
+          %li
+            %a{:href => link[:uri], :target => "_new"}= link[:name]
+
+-# - @resource.views.each do |view|
+-#   - if view.attributes.length>0
+-#     %h3= view
+-#     - view.attributes.each do |attribute|
+-#       %h4
+-#         = attribute.property.name
+-#       %ul
+-#         - attribute.values.each do |value|
+-#           %li          
+-#             - if attribute.property.expected_type=="/common/image"
+-#               %img{:src => "http://img.freebase.com/api/trans/image_thumb/#{value.id}?maxheight=70&mode=fit&maxwidth=70"}
+-#             - elsif attribute.property.object_type?
+-#               %a{:href => "/resources/show?id=#{value.id}"}= value
+-#             - else
+-#               = value

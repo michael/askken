@@ -14,11 +14,9 @@ Rails::Initializer.run do |config|
   # Add additional load paths for your own custom dirs
   # config.load_paths += %W( #{RAILS_ROOT}/extras )
 
-  if RAILS_ENV == "production"
-    config.gem "michael-ken", :source => "gems.github.com", :lib => "ken"
-  else
-    config.gem "ken"
-  end
+
+  config.gem "ken"
+
   config.gem "extlib"
   
   #config.gem "transformer"
@@ -55,7 +53,6 @@ end
 Haml::Template.options[:format] = :html5
 #Transformer.default_transformer = ResourceTransformer
 
-
 # patch FETCH_DATA_QUERY
 module Ken
   FETCH_DATA_QUERY = {
@@ -80,7 +77,7 @@ module Ken
         :link => nil,
         :name => nil,
         :optional => true,
-        :type => "/common/topic",
+        #:type => "/common/topic",
         :limit => 200
       }
     ],
@@ -90,7 +87,7 @@ module Ken
         :link => nil,
         :name => nil,
         :optional => true,
-        :type => "/common/topic",
+        #:type => "/common/topic",
         :limit => 200
       }
     ],

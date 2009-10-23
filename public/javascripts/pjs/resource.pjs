@@ -36,16 +36,19 @@ public class Resource {
 
   int radius = 94;
   float radiusOuter = 110;
+  float radiusClosed = 40;
   int n = 40;
   float angle = 0;
 
   String id = "";
   String name = "";
+  String html = "";
 
-  public Resource(String id, String name) {
+  public Resource(String id, String name, String html) {
 		this.attributes = new ArrayList();
 		this.id = id;
     this.name = name;
+    this.html = html;
   }
 
 	public void setPos(float x, float y) {
@@ -254,35 +257,72 @@ public class Resource {
 		}	else { // draw closed
 			noStroke();
 			
-			if (hovering)
-				fill(180, 180, 180, 100);
-			else
-				fill(222, 222, 222, 100);
-			
-			ellipse(this.x, this.y, 110, 110);
-			ellipse(this.x, this.y, 130, 130);
-			
+      // if (hovering)
+      //  fill(180, 180, 180, 100);
+      // else
+      //  fill(222, 222, 222, 100);
+
 			// spacer
-			fill(255);
-			ellipse(this.x, this.y, 50, 50);
+      fill(255);
+      ellipse(this.x, this.y, radiusClosed*2+50, radiusClosed*2+50);
+
 			
-			labelOffset = 0;
+      fill(0,0,0,0);
+			stroke(222);
+			strokeWeight(20);
+			curContext.lineCap = "butt"; // processing.js patch!
+      
+			arc(this.x, this.y, radiusClosed*2+20, radiusClosed*2+20, 0, TWO_PI);
+
+      float angle = 0;
+      // draw separators
+      for (int i=0; i<7; i++) {
+        stroke(255);
+        strokeWeight(2);
+        angle += TWO_PI/6;
+        line(this.x, this.y, this.x+cos(angle)*(radiusClosed+25), this.y+sin(angle)*(radiusClosed+25));
+      }
+      
+      
+			// draw values
+      // for (int i = 0 ; i < attributes.size(); i++) {
+      //  Attribute attribute = attributes[i];
+      //  ArrayList values = attribute.getValues();
+      // 
+      //  for (int j = 0; j < values.size(); j++) {
+      //    // stroke(colors[i%12]);
+      //           // stroke(222);
+      //           // strokeWeight(1);
+      //           // line(this.x+cos(angle)*(radiusClosed), this.y+sin(angle)*(radiusClosed), this.x+cos(angle)*(radiusOuter+25), this.attr.getResource().y+sin(this.angleStop)*(radiusOuter+25));
+      //    // values[j].draw();
+      //  }
+      //  // draw labels
+      //  // attribute.draw();
+      // }
+			
+      // ellipse(this.x, this.y, 110, 110);
+      // ellipse(this.x, this.y, 130, 130);
+      // 
+      // // spacer
+      // fill(255);
+      // ellipse(this.x, this.y, 50, 50);
+			
+			labelOffset = 30;
 		}
 		
 		if (hovering)
 			fill(0,0,0,150);
     else
      fill(66, 66, 66, 100);
-
+     
 		ellipse(this.x,this.y, diameter, diameter);
 		
 		fill(33);
 		textFont(defaultFont, 13);
 		
 		fontWidth = defaultFont.width((idx+1)+". "+this.getName()) * fontSize;
-		
-		if (!selectedValueIndex)
-		  text((idx+1)+". "+this.getName(), this.x-fontWidth/2, this.y+10+labelOffset+30);
+		// if (!selectedValueIndex)
+		text((idx+1)+". "+this.getName(), this.x-fontWidth/2, this.y+10+labelOffset+30);
 		
 		textFont(defaultFont, fontSize);
 		

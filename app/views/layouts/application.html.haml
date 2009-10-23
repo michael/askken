@@ -9,6 +9,7 @@
     = yield :head
     %title Ask Ken - Showcase
   %body
+    %canvas#kenviz
     %header
       %section#title
         %h1 ASK KEN™
@@ -18,9 +19,8 @@
       %br{:style => "clear: both;"}
     %section#content
       = yield
-      %aside
-        Text goes here
-      %br{:style => "clear: both"}
+    %aside
+
     %footer
       .left
         A

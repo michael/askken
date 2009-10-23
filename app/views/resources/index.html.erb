@@ -11,7 +11,7 @@
     }
 
     if (canvasSupported() && (!$.browser.mozilla || $.browser.version.substr(0,5)=="1.9.1")) {
-      $('#browser_not_supported').hide();
+      $('#content').hide();
       var canvas = document.getElementById("kenviz");
       var p = Processing(canvas);
   
@@ -46,7 +46,7 @@
       search.val(search.attr('default')).addClass('ghost-input');
 
       // init
-      p.resourceId = null; // "/en/new_order";
+      p.resourceId = null // "/en/new_order";
       p.init(p.ajax("/javascripts/pjs/physics.pjs")+p.ajax("/javascripts/pjs/value.pjs")+p.ajax("/javascripts/pjs/attribute.pjs")+p.ajax("/javascripts/pjs/resource.pjs")+p.ajax("/javascripts/pjs/node.pjs")+p.ajax("/javascripts/pjs/edge.pjs")+p.ajax("/javascripts/pjs/graph.pjs")+p.ajax("/javascripts/pjs/network.pjs"));
       initialized = true;
       
@@ -59,9 +59,8 @@
 
 <div id="browser_not_supported">
   Your Browser is currently not supported.<br/><br/>Try one of these:<br/>
-  
     <a href="http://www.mozilla.com/en-US/firefox/firefox.html">Firefox 3.5</a><br/>
     <a href="http://www.apple.com/safari/">Safari 4.0</a><br/>
     <a href="http://www.google.com/chrome/">Chrome</a><br/>
 </div>
-<canvas id="kenviz"></canvas>
+
