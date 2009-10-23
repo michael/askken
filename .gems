@@ -1,2 +1,2 @@
-ken --version '>= 0.0.3' --source http://gemcutter.org
+ken --version '>= 0.1.3' --source http://gemcutter.org
 extlib --version '>= 0.9.10'
