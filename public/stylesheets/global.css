@@ -134,6 +134,7 @@ h3 {
 }
 
 section#content {
+  display: none;
   position: absolute;
   top: 200px;
   bottom: 200px;
@@ -202,11 +203,10 @@ section#infovis {
 
 #browser_not_supported {
 	font-family: GraublauWeb, "Georgia",Helvetica,Lucida,Arial,sans-serif;
-	width: 500px;
 	margin: auto;
-	padding-top: 120px;
 	line-height: 2em;
-	text-align: center;
+	font-size: 15px;
+	display: none;
 }
 
 /* Clearing */

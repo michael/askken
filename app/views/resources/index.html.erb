@@ -11,7 +11,7 @@
     }
 
     if (canvasSupported() && (!$.browser.mozilla || $.browser.version.substr(0,5)=="1.9.1")) {
-      $('#content').hide();
+      
       var canvas = document.getElementById("kenviz");
       var p = Processing(canvas);
   
@@ -53,14 +53,10 @@
       $(window).resize(function(){
         p.resize();
       });
+    } else {
+      $('#browser_not_supported').show();
+      $('#explanation').hide();
     }
   });
 </script>
-
-<div id="browser_not_supported">
-  Your Browser is currently not supported.<br/><br/>Try one of these:<br/>
-    <a href="http://www.mozilla.com/en-US/firefox/firefox.html">Firefox 3.5</a><br/>
-    <a href="http://www.apple.com/safari/">Safari 4.0</a><br/>
-    <a href="http://www.google.com/chrome/">Chrome</a><br/>
-</div>
 
