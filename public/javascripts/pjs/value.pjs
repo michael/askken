@@ -61,26 +61,29 @@ public class Value {
 		float x = this.attr.getResource().x+cos((this.angleStart+this.angleStop) / 2)*(radiusOuter+10);
 		float y = this.attr.getResource().y+sin((this.angleStart+this.angleStop) / 2)*(radiusOuter+10);
 		
-		if (idx<attr.values.size()-1) {
-  		stroke(255, 255, 255, 70);
-  		// value separator
-  		line(this.attr.getResource().x+cos(this.angleStop)*(radius-10), this.attr.getResource().y+sin(this.angleStop)*(radius-10), this.attr.getResource().x+cos(this.angleStop)*(radiusOuter+25), this.attr.getResource().y+sin(this.angleStop)*(radiusOuter+25));
-		} else {
-		  stroke(255);
-		  strokeWeight(2);
-		  line(this.attr.getResource().x+cos(this.angleStop)*(radius-10), this.attr.getResource().y+sin(this.angleStop)*(radius-10), this.attr.getResource().x+cos(this.angleStop)*(radiusOuter+25), this.attr.getResource().y+sin(this.angleStop)*(radiusOuter+25));
-		}
+    if (idx<attr.values.size()-1) {
+         stroke(255, 255, 255, 70);
+         // value separator
+         line(this.attr.getResource().x+cos(this.angleStop)*(radius-10), this.attr.getResource().y+sin(this.angleStop)*(radius-10), this.attr.getResource().x+cos(this.angleStop)*(radiusOuter+25), this.attr.getResource().y+sin(this.angleStop)*(radiusOuter+25));
+    } else {
+      stroke(255);
+      strokeWeight(2);
+      line(this.attr.getResource().x+cos(this.angleStop)*(radius-10), this.attr.getResource().y+sin(this.angleStop)*(radius-10), this.attr.getResource().x+cos(this.angleStop)*(radiusOuter+25), this.attr.getResource().y+sin(this.angleStop)*(radiusOuter+25));
+    }
+       
+    fill(0,0,0);
+    
+    if (hovering) {
+      curContext.lineCap = "butt"; // processing.js patch!
+      noFill();
+      stroke(0,0,0,20);
+      strokeWeight(50);
+      arc(this.attr.resource.x, this.attr.resource.y, (this.attr.resource.radiusOuter)*2, (this.attr.resource.radiusOuter)*2, angleStart, angleStop);
+    }
 		
-		fill(0,0,0);
-		
-		if (hovering) {
-		  curContext.lineCap = "butt"; // processing.js patch!
-		  noFill();
-		  stroke(0,0,0,20);
-		  strokeWeight(50);
-		  arc(this.attr.resource.x, this.attr.resource.y, (this.attr.resource.radiusOuter)*2, (this.attr.resource.radiusOuter)*2, angleStart, angleStop);
-		}
+		noStroke();
 		strokeWeight(0); // reset
+		
 		
     if (selectedValueIndex!=null && attr.getResource().getSelectedAttribute()==attr) {
      float theta = ((this.angleStart+this.angleStop) / 2)%TWO_PI-0.04;

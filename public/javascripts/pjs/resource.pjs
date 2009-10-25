@@ -230,11 +230,8 @@ public class Resource {
 				
 				stroke(attribute.col);
 				strokeWeight(weight);
-				
 				curContext.lineCap = "butt"; // processing.js patch!
-				
 				arc(this.x, this.y, radiusOuter*2, radiusOuter*2, attribute.angleStart, attribute.angleStop);
-
 				noStroke();
 			}
 			
@@ -256,17 +253,10 @@ public class Resource {
       
 		}	else { // draw closed
 			noStroke();
-			
-      // if (hovering)
-      //  fill(180, 180, 180, 100);
-      // else
-      //  fill(222, 222, 222, 100);
-
 			// spacer
       fill(255);
       ellipse(this.x, this.y, radiusClosed*2+50, radiusClosed*2+50);
 
-			
       fill(0,0,0,0);
 			stroke(222);
 			strokeWeight(20);
@@ -282,30 +272,6 @@ public class Resource {
         angle += TWO_PI/6;
         line(this.x, this.y, this.x+cos(angle)*(radiusClosed+25), this.y+sin(angle)*(radiusClosed+25));
       }
-      
-      
-			// draw values
-      // for (int i = 0 ; i < attributes.size(); i++) {
-      //  Attribute attribute = attributes[i];
-      //  ArrayList values = attribute.getValues();
-      // 
-      //  for (int j = 0; j < values.size(); j++) {
-      //    // stroke(colors[i%12]);
-      //           // stroke(222);
-      //           // strokeWeight(1);
-      //           // line(this.x+cos(angle)*(radiusClosed), this.y+sin(angle)*(radiusClosed), this.x+cos(angle)*(radiusOuter+25), this.attr.getResource().y+sin(this.angleStop)*(radiusOuter+25));
-      //    // values[j].draw();
-      //  }
-      //  // draw labels
-      //  // attribute.draw();
-      // }
-			
-      // ellipse(this.x, this.y, 110, 110);
-      // ellipse(this.x, this.y, 130, 130);
-      // 
-      // // spacer
-      // fill(255);
-      // ellipse(this.x, this.y, 50, 50);
 			
 			labelOffset = 30;
 		}
@@ -315,18 +281,13 @@ public class Resource {
     else
      fill(66, 66, 66, 100);
      
+    noStroke();
 		ellipse(this.x,this.y, diameter, diameter);
-		
 		fill(33);
 		textFont(defaultFont, 13);
-		
 		fontWidth = defaultFont.width((idx+1)+". "+this.getName()) * fontSize;
-		// if (!selectedValueIndex)
 		text((idx+1)+". "+this.getName(), this.x-fontWidth/2, this.y+10+labelOffset+30);
-		
 		textFont(defaultFont, fontSize);
-		
-		noStroke();
 	}
 	
 	public boolean mouseOver() {

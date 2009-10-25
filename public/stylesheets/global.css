@@ -158,7 +158,7 @@ aside {
   border: 1px solid #c1c1c1;
   
   background: #fff;
-	opacity: 0.9;
+	opacity: 0.8;
 	overflow: auto;
 }
 
@@ -233,7 +233,7 @@ section#infovis {
     border: 1px solid #c1c1c1;
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
-    opacity: 0.9;
+    opacity: 0.8;
     border-radius: 5px;
     padding: 5px;
     width: 300px;

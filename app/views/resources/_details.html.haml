@@ -7,11 +7,6 @@
   - result["/common/topic/webpage"].each do |webpage|
     - links << {:uri => webpage["uri"], :name => webpage["name"]} unless links.include?(webpage["uri"])
 
--# for later use
--# artist["home_page"].each do |homepage|
--#   artist_links << homepage["uri"] unless artist_links.include?(homepage["uri"])
--# end
-
 %h2= @resource.name
 %p.summary
   - begin
@@ -33,13 +28,12 @@
     %a{:href => "http://en.wikipedia.org/w/index.php?curid=#{wikipedia_id}", :target => "_new"} Wikipedia Article  
   ]
   
-  - if links.length > 0
+  - if @resource.attribute('/common/topic/webpage')
     %h3 Links
-    - if @resource.attribute('/common/topic/webpage')
-      %ul.links
-        - links.each do |link|
-          %li
-            %a{:href => link[:uri], :target => "_new"}= link[:name]
+    %ul.links
+      - links.each do |link|
+        %li
+          %a{:href => link[:uri], :target => "_new"}= link[:name]
 
 -# - @resource.views.each do |view|
 -#   - if view.attributes.length>0

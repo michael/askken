@@ -74,7 +74,7 @@ public class Attribute {
   public void draw() {
 		float radius = this.resource.radius;
 		fill(col);
-
+        
 		textFont(defaultFont, 45);
     if (this==resource.selectedAttribute) {
      textFont(defaultFont, 45);

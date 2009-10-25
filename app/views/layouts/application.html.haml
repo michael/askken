@@ -20,7 +20,29 @@
     %section#content
       = yield
     %aside
+      / askken introduction
+      %h2 About
+      %p
+        ASK KEN™ is some sort of a Node-Link diagram that allows to visually navigate through
+        interconnected topics provided by the 
+        %a{:href => "http://freebase.com"} Freebase
+        Service.
 
+        It takes advantage of the latest HTML5 features
+        by using the canvas element for drawing.
+      %h3 Get started
+      %p
+        Start using the Browser by just typing in the name of a topic, as you would do in Wikipedia.
+      %h3 Quirks
+      %p
+        Although it’s basically working, the project has rough edges and is far from being complete. There may be some
+        unexpected behavior here and there. Also, as the number of nodes increases,
+        the performance may drop significantly. So please be aware of that.
+      %h3 Credits
+      %p
+        Thanks to 
+        %a{:href => "http://smoofles.at/", :target => "_blank"} Samo Korosec
+        for helping with color and layout.
     %footer
       .left
         A
