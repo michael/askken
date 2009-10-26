@@ -76,7 +76,7 @@ public class Attribute {
 		fill(col);
         
 		textFont(defaultFont, 45);
-    if (this==resource.selectedAttribute) {
+    if (this==resource.selectedAttribute && !resource.isTransitioning()) {
      textFont(defaultFont, 45);
      text(resource.selectedAttribute.getValues().size()+"", resource.x-50, resource.y-80, 100);
      textFont(defaultFont, 13);

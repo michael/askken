@@ -62,13 +62,13 @@ public class Value {
 		float y = this.attr.getResource().y+sin((this.angleStart+this.angleStop) / 2)*(radiusOuter+10);
 		
     if (idx<attr.values.size()-1) {
-         stroke(255, 255, 255, 70);
-         // value separator
-         line(this.attr.getResource().x+cos(this.angleStop)*(radius-10), this.attr.getResource().y+sin(this.angleStop)*(radius-10), this.attr.getResource().x+cos(this.angleStop)*(radiusOuter+25), this.attr.getResource().y+sin(this.angleStop)*(radiusOuter+25));
+      stroke(255, 255, 255, 70);
+      // value separator
+      line(this.attr.getResource().x+cos(this.angleStop)*(radiusOuter-25), this.attr.getResource().y+sin(this.angleStop)*(radiusOuter-25), this.attr.getResource().x+cos(this.angleStop)*(radiusOuter+25), this.attr.getResource().y+sin(this.angleStop)*(radiusOuter+25));
     } else {
       stroke(255);
       strokeWeight(2);
-      line(this.attr.getResource().x+cos(this.angleStop)*(radius-10), this.attr.getResource().y+sin(this.angleStop)*(radius-10), this.attr.getResource().x+cos(this.angleStop)*(radiusOuter+25), this.attr.getResource().y+sin(this.angleStop)*(radiusOuter+25));
+      line(this.attr.getResource().x+cos(this.angleStop)*(radiusOuter-25), this.attr.getResource().y+sin(this.angleStop)*(radiusOuter-25), this.attr.getResource().x+cos(this.angleStop)*(radiusOuter+25), this.attr.getResource().y+sin(this.angleStop)*(radiusOuter+25));
     }
        
     fill(0,0,0);

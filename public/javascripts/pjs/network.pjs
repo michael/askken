@@ -20,36 +20,12 @@ int fontSizeCaption = 16;
 
 int nodeCount = 0;
 
-Resource fetchResource(String resource) {
-	var json;
-	$.ajax({
-		async: false,
-    type: "GET",
-    url: "/resources/show",
-		data: {id: resource},
-    dataType: 'json',
-    success: function(response) {
-      json = response.data;
-      html = response.details_html;
-    }
-  });
-	
-	Resource resource = new Resource(json.id, json.name, html);
-	int numValues = 0;
-	for (int i = 0 ; i < json.attributes.length(); i++) {
-		Attribute attr = new Attribute(json.attributes[i].name, resource);
-		
-		for (int j = 0; j < json.attributes[i].values.length(); j++) {
-			attr.addValue(new Value(json.attributes[i].values[j].id, json.attributes[i].values[j].name, attr));
-			numValues++;
-		}
-		resource.addAttribute(attr);
-	}
-	
-	resource.setNumValues(numValues);
+Resource fetchResource(String resourceId) {
+  // init dummy resource
+  Resource resource = new Resource(resourceId, "", "");
 	resource.idx = nodeCount;
   nodeCount++;
-  
+  resource.fetchData(); // start fetching data from freebase
 	return resource;
 }
 
@@ -63,7 +39,6 @@ float SPACER_STRENGTH = 1000;
 
 int selectedValueIndex;
 int selectedNodeIndex;
-
 
 void resize() {
 	size(window.innerWidth-10, window.innerHeight-15);
@@ -82,6 +57,8 @@ void setup() {
 
 	if (resourceId) {
 		r = fetchResource(resourceId);
+		
+		
 		g.addNode(root = new Node(r));
 		g.setSelectedNode(root);
 		$('aside').html(r.html);
@@ -186,12 +163,14 @@ void mousePressed() {
 
 		} else if (selectedNodeIndex != null) {
 			// TODO: Zoom to node
-			r.setClosed();
 			selectedNode = g.nodes[selectedNodeIndex];
-			selectedNode.getSubject().setOpen();
-			$('aside').html(selectedNode.getSubject().html);
-			g.setSelectedNode(selectedNode);
 			g.setDragNode(selectedNode);
+			if (g.getSelectedNode()!=selectedNode) {
+  			r.setClosed();
+  			selectedNode.getSubject().setOpen();
+  			$('aside').html(selectedNode.getSubject().html);
+  			g.setSelectedNode(selectedNode);
+			}
 		}
 				
   } else { // Right click

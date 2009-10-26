@@ -17,7 +17,7 @@
   - if image
     %img.summary-img{:src => "http://img.freebase.com/api/trans/image_thumb/#{image.id}?mode=fit&maxwidth=150"}
   - descr = Ken.session.blurb_content(@resource.attribute('/common/topic/article').values.first.id, :maxlength => 500) if @resource.attribute('/common/topic/article')
-  - descr = "there's no description for this topic yet." if descr.length==0
+  - descr = "there's no description for this topic yet." if !descr || descr.length==0
   = descr
   [
   %a{:href => "http://freebase.com/view#{resource.id}", :target => "_new"} Freebase Topic

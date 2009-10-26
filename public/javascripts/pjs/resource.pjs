@@ -2,11 +2,28 @@
 /* Resource
 /**************************************************************/
 
+
+// easing function
+
+function easeInOutCubic(pos) {
+  if ((pos/=0.5) < 1) return 0.5*Math.pow(pos,3);
+  return 0.5 * (Math.pow((pos-2),3) + 2);
+}
+
 public class Resource {
   boolean selected = false;
   boolean hovering = false;
   boolean dragging = false;
 	boolean transitioning = false;
+	boolean loading = true;
+
+	String state = "open"
+	float theta = 0; // for spinning animation
+
+	int tweenDuration = 15; // in frames
+	int frameCount = 0;
+	
+	boolean loading = true;
 
 	float targetWeight = 1.0;
 	float highlightedWeight = 4.0;
@@ -34,8 +51,11 @@ public class Resource {
   // internals
   ArrayList attributes;
 
-  int radius = 94;
+  int radius = 40;
   float radiusOuter = 110;
+  float targetRadiusOuter = 110;
+  
+  
   float radiusClosed = 40;
   int n = 40;
   float angle = 0;
@@ -49,6 +69,53 @@ public class Resource {
 		this.id = id;
     this.name = name;
     this.html = html;
+  }
+  
+  public void fetchData() {
+    
+    var json;
+    var that = this;
+    
+    this.loading = true;
+    
+  	$.ajax({
+  		async: true,
+      type: "GET",
+      url: "/resources/show",
+  		data: {id: that.id},
+      dataType: 'json',
+      success: function(response) {
+    
+        // apply fetched data
+        that.id = response.data.id;
+        that.name = response.data.name;
+        that.html = response.data.details_html;
+        
+        int numValues = 0;
+        for (int i = 0 ; i < response.data.attributes.length(); i++) {
+         Attribute attr = new Attribute(response.data.attributes[i].name, that);
+         
+         for (int j = 0; j < response.data.attributes[i].values.length(); j++) {
+           attr.addValue(new Value(response.data.attributes[i].values[j].id, response.data.attributes[i].values[j].name, attr));
+           numValues++;
+         }
+         that.addAttribute(attr);
+        }
+        
+        that.numValues = numValues;
+        that.loading = false;
+        that.radiusOuter = 40;
+        that.targetRadiusOuter = 110;
+        that.frameCount = 0;
+      },
+      error: function() {
+        that.loading = false;
+      }
+    });
+  }
+  
+  public boolean isTransitioning() {
+    return (frameCount<tweenDuration);
   }
 
 	public void setPos(float x, float y) {
@@ -99,11 +166,20 @@ public class Resource {
   }
 
   public void setClosed() {
-    open = false;
+    this.state = "closed";
   }
-
+  
   public void setOpen() {
-    open = true;
+    if (this.state != "open") {
+      this.state = "open";
+      this.radiusOuter = 40;
+      this.targetRadiusOuter = 110;
+      this.frameCount = 0;
+    }
+  }
+  
+  public void setState(state) {
+    this.state = state;
   }
 
   public String getId() {
@@ -165,6 +241,15 @@ public class Resource {
 			attribute.setAngles(angleStart, angleStop);
 			attribute.setCol(colors[i%12]);
 		}
+		
+		if (loading)
+		  this.theta = (this.theta+0.07)%TWO_PI // update theta for loading animation
+		  
+    // tweening fun
+		if (isTransitioning()) {
+		  frameCount++;
+		  radiusOuter = radiusOuter + ((targetRadiusOuter - radiusOuter) * easeInOutCubic(frameCount/tweenDuration));
+		}
 	}
 
   void setSelected(boolean b) {
@@ -206,7 +291,33 @@ public class Resource {
 	}
 	
 	public void draw() {
-		if (open) {
+
+    if (loading) { // draw loading
+      noStroke();
+			// spacer
+      fill(255);
+      ellipse(this.x, this.y, radiusClosed*2+50, radiusClosed*2+50);
+
+      fill(0,0,0,0);
+			stroke(111);
+			strokeWeight(20);
+			curContext.lineCap = "butt"; // processing.js patch!
+      
+			arc(this.x, this.y, radiusClosed*2+20, radiusClosed*2+20, 0, TWO_PI);
+
+      float angle = 0;
+      angle += theta;
+      // draw separators
+      for (int i=0; i<7; i++) {
+        stroke(255);
+        strokeWeight(2);
+        angle += TWO_PI/6;
+        
+        line(this.x, this.y, this.x+cos(angle)*(radiusClosed+25), this.y+sin(angle)*(radiusClosed+25));
+      }
+			labelOffset = 30;
+			
+    } else if (state=="open") {
 			noStroke();
 			
 			// spacer
@@ -251,7 +362,7 @@ public class Resource {
       
       labelOffset = radiusOuter;
       
-		}	else { // draw closed
+		}	else if (state=="closed") { // draw closed
 			noStroke();
 			// spacer
       fill(255);
@@ -277,17 +388,20 @@ public class Resource {
 		}
 		
 		if (hovering)
-			fill(0,0,0,150);
+		  fill(0,0,0,150);
     else
-     fill(66, 66, 66, 100);
-     
+      fill(66, 66, 66, 100);
+
     noStroke();
 		ellipse(this.x,this.y, diameter, diameter);
-		fill(33);
-		textFont(defaultFont, 13);
-		fontWidth = defaultFont.width((idx+1)+". "+this.getName()) * fontSize;
-		text((idx+1)+". "+this.getName(), this.x-fontWidth/2, this.y+10+labelOffset+30);
-		textFont(defaultFont, fontSize);
+    
+    if (!loading) {
+  		fill(33);
+  		textFont(defaultFont, 13);
+  		fontWidth = defaultFont.width((idx+1)+". "+this.getName()) * fontSize;
+  		text((idx+1)+". "+this.getName(), this.x-fontWidth/2, this.y+10+labelOffset+30);
+  		textFont(defaultFont, fontSize);
+    }
 	}
 	
 	public boolean mouseOver() {
