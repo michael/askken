@@ -159,8 +159,6 @@ void mousePressed() {
 				g.setSelectedNode(g.nodes[0]);
 			}
 			
-			$('aside').html(g.getSelectedNode().getSubject().html);
-
 		} else if (selectedNodeIndex != null) {
 			// TODO: Zoom to node
 			selectedNode = g.nodes[selectedNodeIndex];

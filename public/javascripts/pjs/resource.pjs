@@ -89,7 +89,7 @@ public class Resource {
         // apply fetched data
         that.id = response.data.id;
         that.name = response.data.name;
-        that.html = response.data.details_html;
+        that.html = response.details_html;
         
         int numValues = 0;
         for (int i = 0 ; i < response.data.attributes.length(); i++) {
@@ -107,6 +107,8 @@ public class Resource {
         that.radiusOuter = 40;
         that.targetRadiusOuter = 110;
         that.frameCount = 0;
+        
+        $('aside').html(g.getSelectedNode().getSubject().html);
       },
       error: function() {
         that.loading = false;
