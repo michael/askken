@@ -10,7 +10,7 @@
       return canvas_compatible;
     }
 
-    if (canvasSupported() && (!$.browser.mozilla || $.browser.version.substr(0,5)=="1.9.1")) {
+    if (canvasSupported()) {
       
       var canvas = document.getElementById("kenviz");
       var p = Processing(canvas);

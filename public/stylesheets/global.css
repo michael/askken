@@ -19,7 +19,7 @@ footer {
 	bottom: 5px;
 	left: 5px;
 	right: 10px;
-	font-family: GraublauWeb, Georgia,serif;
+	font-family: GraublauWeb, "Helvetica Neue", Helvetica, Arial, sans-serif;
 	font-size: 12px;
 	line-height: 1.4;
 	/* clearing */
@@ -70,7 +70,7 @@ header section#title p {
 	margin: 0;
 	padding: 0;
 	margin-left: 10px;
-	font-family: GraublauWeb, Georgia,serif;
+	font-family: GraublauWeb, "Helvetica Neue", Helvetica, Arial, sans-serif;
 	font-size:12px;
 	line-height:1.4;	
 }
@@ -90,7 +90,7 @@ html,body {
 	padding:0px;
 	color: #555;
 	
-	font-family: GraublauWeb, "Helvetica Neue",Helvetica,Lucida,Arial,sans-serif;
+	font-family: GraublauWeb, "Helvetica Neue", Helvetica, Arial, sans-serif;
 	font-size-adjust:none;
 	font-stretch:normal;
 	font-style:normal;
@@ -111,7 +111,7 @@ body {
 }
 
 header h1 {
-	font-family: GraublauWeb, "Helvetica Neue",Helvetica,Lucida,Arial,sans-serif;
+	font-family: GraublauWeb, "Helvetica Neue", Helvetica, Arial, sans-serif;
 	width: 200px;
 	color: black;
 	font-weight: bold;
@@ -202,7 +202,7 @@ section#infovis {
 }
 
 #browser_not_supported {
-	font-family: GraublauWeb, "Georgia",Helvetica,Lucida,Arial,sans-serif;
+	font-family: GraublauWeb, "Helvetica Neue", Helvetica, Arial, sans-serif;
 	margin: auto;
 	line-height: 2em;
 	font-size: 15px;
@@ -237,7 +237,7 @@ section#infovis {
     border-radius: 5px;
     padding: 5px;
     width: 300px;
-		font-family: GraublauWeb, "Georgia",Helvetica,Lucida,Arial,sans-serif;
+		font-family: GraublauWeb, "Helvetica Neue", Helvetica, Arial, sans-serif;
 		text-align: right;
 		font-size: 13px;
 		color: #555;
@@ -315,9 +315,8 @@ reset all Freebase Suggest elements to insure consisten cross-browser rendering
     border: 0;
     outline: 0;
     font-weight: inherit;
-    /*font-style: italic;*/
     font-size: 100%;
-    font-family: GraublauWeb, Georgia;
+    font-family: GraublauWeb, "Helvetica Neue", Helvetica, Arial, sans-serif;
     vertical-align: baseline;
 
 }
@@ -792,7 +791,6 @@ Freebase Suggest Attribution
 }
 
 .fbs-flyout-types {
-    /*font-style: italic;*/
     line-height: 1; 
     font-size: 1.2em;
 }
