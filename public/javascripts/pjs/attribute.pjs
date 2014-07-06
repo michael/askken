@@ -27,6 +27,7 @@ public class Attribute {
     this.label = label;
 		this.name = label;
 		this.resource = resource;
+		resource.setSelectedAttribute(this);
   }
 
 	public void setPos(float x, float y) {
